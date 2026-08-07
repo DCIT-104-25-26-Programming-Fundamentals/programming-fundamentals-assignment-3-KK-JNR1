@@ -43,4 +43,64 @@
 // YOUR CODE BELOW — remove the // symbols from the scaffold and fill it in
 // =============================================================================
 
+const readlineSync = require('readline-sync');
+function calculateSum(numbers) {
+    let sum = 0;
+    for (let i = 0; i < numbers.length; i++) {
+        sum += numbers[i];
+    }
+    return sum;
+}
 
+function calculateAverage(numbers) {
+    let sum = 0;
+    for (let i = 0; i < numbers.length; i++) {
+        sum += numbers[i];
+    }
+    return sum / numbers.length;
+}
+
+function findMaximum(numbers) {
+    let max = numbers[0];
+    for (let i = 1; i < numbers.length; i++) {
+        if (numbers[i] > max) {
+            max = numbers[i];
+        }
+    }
+    return max;
+}
+
+function findMinimum(numbers) {
+    let min = numbers[0];
+    for (let i = 1; i < numbers.length; i++) {
+        if (numbers[i] < min) {
+            min = numbers[i];
+        }
+    }
+    return min;
+}
+
+let n = Number(readlineSync.question('How many numbers? '));
+
+if (n <= 0 || Number.isNaN(n)) {
+    console.log('Error: Please enter a positive integer.');
+    process.exit();
+}
+
+let numbers = [];
+for (let i = 1; i <= n; i++) {
+    let value = Number(readlineSync.question('Enter number ' + i + ': '));
+    numbers.push(value);
+}
+
+let sum = calculateSum(numbers);
+let average = calculateAverage(numbers);
+let maximum = findMaximum(numbers);
+let minimum = findMinimum(numbers);
+
+console.log('');
+console.log('Results:');
+console.log('Sum:     ' + sum);
+console.log('Average: ' + average);
+console.log('Maximum: ' + maximum);
+console.log('Minimum: ' + minimum);

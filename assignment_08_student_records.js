@@ -84,4 +84,145 @@
 // YOUR CODE BELOW — remove the // symbols from the scaffold and fill it in
 // =============================================================================
 
+const readline = require("readline-sync");
 
+let students = [];
+
+function calculateAverage(scores) {
+  if (!scores || scores.length === 0) return 0;
+  const sum = scores.reduce((total, score) => total + score, 0);
+  return sum / scores.length;
+}
+
+function addStudent() {
+  const name = readline.question("Student name: ").trim();
+  if (name === "") {
+    console.log("Error: Student name cannot be empty.");
+    return;
+  }
+
+  const idInput = readline.question("Student ID: ").trim();
+  const id = parseInt(idInput, 10);
+  if (isNaN(id)) {
+    console.log("Error: Student ID must be a valid number.");
+    return;
+  }
+
+  const exists = students.some((student) => student.id === id);
+  if (exists) {
+    console.log(`Error: Student with ID ${id} already exists.`);
+    return;
+  }
+
+  const numScoresInput = readline.question("How many scores? ").trim();
+  const numScores = parseInt(numScoresInput, 10);
+
+  if (isNaN(numScores) || numScores <= 0) {
+    console.log("Error: Number of scores must be a positive integer.");
+    return;
+  }
+
+  const scores = [];
+  for (let i = 1; i <= numScores; i++) {
+    const scoreInput = readline.question(`Enter score ${i}: `).trim();
+    const score = parseFloat(scoreInput);
+
+    if (isNaN(score)) {
+      console.log("Error: Invalid score entered. Aborting student registration.");
+      return;
+    }
+    scores.push(score);
+  }
+
+  const studentObj = {
+    name: name,
+    id: id,
+    scores: scores,
+  };
+
+  students.push(studentObj);
+  console.log(`Student "${name}" added successfully.`);
+}
+
+function displayAllStudents() {
+  if (students.length === 0) {
+    console.log("No student records found.");
+    return;
+  }
+
+  console.log("\n==========================================================================");
+  console.log("                           ALL STUDENT RECORDS                           ");
+  console.log("==========================================================================");
+
+  students.forEach((student, index) => {
+    const avg = calculateAverage(student.scores).toFixed(2);
+    console.log(`\n${index + 1}. Name:    ${student.name}`);
+    console.log(`   ID:      ${student.id}`);
+    console.log(`   Scores:  [${student.scores.join(", ")}]`);
+    console.log(`   Average: ${avg}`);
+  });
+  console.log("==========================================================================");
+}
+
+function calculateSpecificAverage() {
+  if (students.length === 0) {
+    console.log("No student records available.");
+    return;
+  }
+
+  const idInput = readline.question("Enter student ID: ").trim();
+  const id = parseInt(idInput, 10);
+
+  if (isNaN(id)) {
+    console.log("Error: Invalid ID format.");
+    return;
+  }
+
+  const student = students.find((s) => s.id === id);
+
+  if (!student) {
+    console.log(`Error: Student with ID ${id} not found.`);
+  } else {
+    const avg = calculateAverage(student.scores).toFixed(2);
+    console.log(`${student.name}'s average score: ${avg}`);
+  }
+}
+
+function printMenu() {
+  console.log("\n================================");
+  console.log("   STUDENT RECORD SYSTEM MENU   ");
+  console.log("================================");
+  console.log("1. Add student");
+  console.log("2. Display all students");
+  console.log("3. Calculate average score");
+  console.log("4. Quit");
+}
+
+function main() {
+  let isRunning = true;
+
+  while (isRunning) {
+    printMenu();
+    const choice = readline.question("Enter your choice (1-4): ").trim();
+
+    switch (choice) {
+      case "1":
+        addStudent();
+        break;
+      case "2":
+        displayAllStudents();
+        break;
+      case "3":
+        calculateSpecificAverage();
+        break;
+      case "4":
+        console.log("Goodbye!");
+        isRunning = false;
+        break;
+      default:
+        console.log("Invalid choice. Please enter a number between 1 and 4.");
+        break;
+    }
+  }
+}
+main();
